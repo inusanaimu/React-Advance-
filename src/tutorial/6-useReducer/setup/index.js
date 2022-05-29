@@ -2,25 +2,7 @@ import React, { useState, useReducer } from 'react'
 import Modal from './Modal'
 import { data } from '../../../data'
 // reducer function
-const reducer = (state, action) => {
-  if (action.type === 'ADD_ITEM') {
-    const newPeople = [...state.people, action.payload]
-    return {
-      ...state,
-      people: newPeople,
-      showModal: true,
-      modalContent: 'item added',
-    }
-  }
-  if (action.type === 'NO_VALUE') {
-    return { ...state, showModal: true, modalContent: 'Please Enter Value' }
-  }
-  if (action.type === 'CLOSE_MODAL') {
-    return { ...state, showModal: false }
-  }
-  // return state
-  throw new Error('no matching Error type')
-}
+import { reducer } from './reducer'
 const defaultState = {
   people: [],
   showModal: false,
@@ -43,6 +25,7 @@ const Index = () => {
   const closeModal = () => {
     dispatch({ type: 'CLOSE_MODAL' })
   }
+
   return (
     <>
       {state.showModal && (
@@ -60,8 +43,15 @@ const Index = () => {
       </form>
       {state.people.map((person) => {
         return (
-          <div key={person.id}>
+          <div key={person.id} className='item'>
             <h4>{person.name}</h4>
+            <button
+              onClick={() =>
+                dispatch({ type: 'REMOVE_ITEM', payload: person.id })
+              }
+            >
+              remove
+            </button>
           </div>
         )
       })}
